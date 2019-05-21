@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
@@ -14,6 +15,7 @@ import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfByte;
 import org.opencv.core.MatOfPoint;
+import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.*;
@@ -38,6 +40,7 @@ public class Segmentation{
 	
 	public Image segmentProcess(Image im){
 		
+		
 		BufferedImage img = (BufferedImage) im;
 		BufferedImage imageCopy = new BufferedImage(im.getWidth(null), im.getHeight(null), BufferedImage.TYPE_3BYTE_BGR);
 		imageCopy.getGraphics().drawImage(im, 0, 0, null);
@@ -48,9 +51,14 @@ public class Segmentation{
 		Mat mat = new Mat(im.getHeight(null), im.getWidth(null), CvType.CV_8UC1);
 		mat.put(0, 0, data);  
 		System.out.println("Image width = " + mat.width());
+		
+		
+		Point center = new Point(20, 20);
+		Imgproc.circle(mat, center, 20, new Scalar( 255, 0, 0 ));
 		Imgproc.cvtColor(mat, gray,  Imgproc.COLOR_BGR2GRAY);
 		Imgproc.threshold(gray,binary,0,255,Imgproc.THRESH_BINARY+Imgproc.THRESH_OTSU);
-		
+//		Imgproc.addWeighted(overlay, alpha, output, 1 - alpha,
+//				0, output)l
 		//Imgproc.watershed(binary, markers);
 		MatOfByte bytemat = new MatOfByte();
 		
@@ -137,7 +145,7 @@ public class Segmentation{
 		mat1 = out = image2Mat(img);
 				
 		Imgproc.cvtColor(mat1,mat1,Imgproc.COLOR_BGR2GRAY);
-
+		
 		List<MatOfPoint> contours = new ArrayList<MatOfPoint>(10);
 		Mat hierarchy = new Mat(200, 200, CvType.CV_8UC1, new Scalar(0));
 
@@ -155,6 +163,10 @@ public class Segmentation{
 				    Imgproc.drawContours(mat1, contours, i, new Scalar(0, 255, 0), 2);
 				}
 			}
+			Point center = new Point(20, 20);
+			Imgproc.circle(mat1, center, 20, new Scalar( 0, 0, 255 ), -1);
+//			roi = new Image(Imgproc.circle(mat1, center, 20, new Scalar( 0, 0, 255 ), -1));
+//			Core.addWeighted(mat1,0.2,
 			out=mat1;
 		}
 		else{
