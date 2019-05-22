@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
@@ -52,9 +53,6 @@ public class Segmentation{
 		mat.put(0, 0, data);  
 		System.out.println("Image width = " + mat.width());
 		
-		
-		Point center = new Point(20, 20);
-		Imgproc.circle(mat, center, 20, new Scalar( 255, 0, 0 ));
 		Imgproc.cvtColor(mat, gray,  Imgproc.COLOR_BGR2GRAY);
 		Imgproc.threshold(gray,binary,0,255,Imgproc.THRESH_BINARY+Imgproc.THRESH_OTSU);
 //		Imgproc.addWeighted(overlay, alpha, output, 1 - alpha,
@@ -94,8 +92,28 @@ public class Segmentation{
 	}
 	
 	public Image mat2Image(Mat mat){
-	
-		BufferedImage img = null;
+		
+//		Mat circle;
+//		
+////		Point center = new Point(20, 20);
+////		Imgproc.circle(mat, center, 20, new Scalar( 255, 0, 0 ));
+//		Point point1 = new Point(20, 20);
+//		Point point2 = new Point(200, 200);
+////		circle = new Mat();
+////		Imgproc.circle(circle, center, 10, new Scalar( 0, 0, 255 ), -1);
+//		circle = mat;
+//		Imgproc.rectangle(circle, point1, point2, new Scalar( 0, 0, 255 ), -1);
+////		Mat roi = new Mat(;
+//
+////        addWeighted_1(src1.nativeObj, alpha, src2.nativeObj, beta, gamma, dst.nativeObj);
+//     
+//		Core.addWeighted(mat, 0.9, circle, 0.1, 0, mat);
+//
+		
+		
+		BufferedImage img = new BufferedImage(mat.width(),mat.height(),BufferedImage.TYPE_INT_ARGB);;
+
+//		BufferedImage img = null;
 		MatOfByte bytemat = new MatOfByte();
 		Imgcodecs.imencode(".png", mat, bytemat);
 		byte[] bytes = bytemat.toArray();
@@ -108,6 +126,10 @@ public class Segmentation{
 			System.out.println("Problem with image reading");
 			JOptionPane.showMessageDialog(null, "Problem with image reading");
 		}
+		
+		drawSemiTrasparaentFilledCircle(img, 0, 0, 100, 1);
+		drawSemiTrasparaentFilledCircle(img, 0, 0, 70, 2);
+		drawSemiTrasparaentFilledCircle(img, 0, 0, 40, 3);
 		
 		return (Image) img;
 	}
@@ -148,6 +170,7 @@ public class Segmentation{
 		
 		List<MatOfPoint> contours = new ArrayList<MatOfPoint>(10);
 		Mat hierarchy = new Mat(200, 200, CvType.CV_8UC1, new Scalar(0));
+//		Imgproc.cvtColor(mat1,mat1,Imgproc.COLOR_BayerGR2RGB_EA);
 
 		if(segP!=null){
 			if(segP.ismOpenAndClose()){
@@ -163,17 +186,38 @@ public class Segmentation{
 				    Imgproc.drawContours(mat1, contours, i, new Scalar(0, 255, 0), 2);
 				}
 			}
-			Point center = new Point(20, 20);
-			Imgproc.circle(mat1, center, 20, new Scalar( 0, 0, 255 ), -1);
-//			roi = new Image(Imgproc.circle(mat1, center, 20, new Scalar( 0, 0, 255 ), -1));
-//			Core.addWeighted(mat1,0.2,
+
 			out=mat1;
 		}
 		else{
 			JOptionPane.showMessageDialog(null, "No segementation parameters are selected!");
 		}
+
 		img = mat2Image(out);
 		return img;
+	}
+	
+	public void drawSemiTrasparaentFilledCircle(BufferedImage img, int x, int y, int r,  int color) {
+		Graphics2D g = (Graphics2D) img.getGraphics();
+		Color transparent;
+		
+		switch(color) {
+			case 1:
+				transparent = new Color(0x33FF00FF, true);
+				break;
+			case 2:
+				transparent = new Color(0x337700FF, true);
+				break;
+			case 3:
+				transparent = new Color(0x330000FF, true);
+				break;
+			default: transparent = new Color(0x330000FF, true);
+		}
+
+	    g.setColor(transparent);
+	    g.setBackground(transparent);
+		g.fillOval(x, y, r, r);
+		
 	}
 
 }
