@@ -108,9 +108,10 @@ public class Segmentation{
 			JOptionPane.showMessageDialog(null, "Problem with image reading");
 		}
 		
-		drawSemiTrasparaentFilledCircle(img, 100, 100, 50, 1);
-		drawSemiTrasparaentFilledCircle(img, 100, 100, 75, 2);
-		drawSemiTrasparaentFilledCircle(img, 100, 100, 100, 3);
+		addCryoProbe(img, 150, 150);
+		addCryoProbe(img, 250, 250);
+		addCryoProbe(img, 250, 150);
+		addCryoProbe(img, 150, 250);
 		
 		return (Image) img;
 	}
@@ -188,13 +189,13 @@ public class Segmentation{
 		
 		switch(color) {
 			case 1:
-				transparent = new Color(0x33FF00FF, true);
+				transparent = new Color(0x330000FF, true);
 				break;
 			case 2:
 				transparent = new Color(0x337700FF, true);
 				break;
 			case 3:
-				transparent = new Color(0x330000FF, true);
+				transparent = new Color(0x33FF00FF, true);
 				break;
 			default: transparent = new Color(0x330000FF, true);
 		}
@@ -203,6 +204,12 @@ public class Segmentation{
 	    g.setBackground(transparent);
 		g.fillOval(x-(r/2), y-(r/2), r, r);
 		
+	}
+	
+	public void addCryoProbe(BufferedImage img, int x, int y) {
+		drawSemiTrasparaentFilledCircle(img, x, y, 50, 1);
+		drawSemiTrasparaentFilledCircle(img, x, y, 80, 2);
+		drawSemiTrasparaentFilledCircle(img, x, y, 130, 3);
 	}
 
 }
