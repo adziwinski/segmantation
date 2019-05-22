@@ -93,26 +93,7 @@ public class Segmentation{
 	
 	public Image mat2Image(Mat mat){
 		
-//		Mat circle;
-//		
-////		Point center = new Point(20, 20);
-////		Imgproc.circle(mat, center, 20, new Scalar( 255, 0, 0 ));
-//		Point point1 = new Point(20, 20);
-//		Point point2 = new Point(200, 200);
-////		circle = new Mat();
-////		Imgproc.circle(circle, center, 10, new Scalar( 0, 0, 255 ), -1);
-//		circle = mat;
-//		Imgproc.rectangle(circle, point1, point2, new Scalar( 0, 0, 255 ), -1);
-////		Mat roi = new Mat(;
-//
-////        addWeighted_1(src1.nativeObj, alpha, src2.nativeObj, beta, gamma, dst.nativeObj);
-//     
-//		Core.addWeighted(mat, 0.9, circle, 0.1, 0, mat);
-//
-		
-		
-		BufferedImage img = new BufferedImage(mat.width(),mat.height(),BufferedImage.TYPE_INT_ARGB);;
-
+		BufferedImage img = new BufferedImage(mat.width(),mat.height(),BufferedImage.TYPE_INT_ARGB);
 //		BufferedImage img = null;
 		MatOfByte bytemat = new MatOfByte();
 		Imgcodecs.imencode(".png", mat, bytemat);
@@ -127,9 +108,9 @@ public class Segmentation{
 			JOptionPane.showMessageDialog(null, "Problem with image reading");
 		}
 		
-		drawSemiTrasparaentFilledCircle(img, 0, 0, 100, 1);
-		drawSemiTrasparaentFilledCircle(img, 0, 0, 70, 2);
-		drawSemiTrasparaentFilledCircle(img, 0, 0, 40, 3);
+		drawSemiTrasparaentFilledCircle(img, 100, 100, 50, 1);
+		drawSemiTrasparaentFilledCircle(img, 100, 100, 75, 2);
+		drawSemiTrasparaentFilledCircle(img, 100, 100, 100, 3);
 		
 		return (Image) img;
 	}
@@ -186,11 +167,15 @@ public class Segmentation{
 				    Imgproc.drawContours(mat1, contours, i, new Scalar(0, 255, 0), 2);
 				}
 			}
+			else {
+				Imgproc.cvtColor(mat1,mat1,Imgproc.COLOR_BayerGR2RGB_EA);
+			}
 
 			out=mat1;
 		}
 		else{
 			JOptionPane.showMessageDialog(null, "No segementation parameters are selected!");
+			Imgproc.cvtColor(mat1,mat1,Imgproc.COLOR_BayerGR2RGB_EA);
 		}
 
 		img = mat2Image(out);
@@ -216,7 +201,7 @@ public class Segmentation{
 
 	    g.setColor(transparent);
 	    g.setBackground(transparent);
-		g.fillOval(x, y, r, r);
+		g.fillOval(x-(r/2), y-(r/2), r, r);
 		
 	}
 
