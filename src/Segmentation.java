@@ -109,10 +109,9 @@ public class Segmentation{
 		}
 		
 		addCryoProbe(img, 150, 150);
-		addCryoProbe(img, 250, 250);
+		addCryoProbe(img, 200, 250);
 		addCryoProbe(img, 250, 150);
-		addCryoProbe(img, 150, 250);
-		
+
 		return (Image) img;
 	}
 	
