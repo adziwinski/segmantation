@@ -5,9 +5,9 @@ The program was made for do segmentation a prostate in TRUS images.
 
 ## Program description
 As you can see on the pictrure above user can make segementation by two ways.
-#### 1. WITH DEFAULT SETTINGS ####
+### 1. With default settings ####
 This mode are set by default. Then standard settings Otsu's tresholding method is used and
-#### 2. WITH MANUAL SETTINGS ####
+#### 2. With manual settings ####
 In this mode treshold can be set manuals and other processing can be added or deleted.
 
 Independent the mode the image is converted to 8-bit and histogram is stretched.
